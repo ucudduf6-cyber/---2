@@ -1,0 +1,3 @@
+// Optional: run this once from browser devtools on your deployed site after admin sign-in.
+// It copies the initial LUMIO sample catalog into the shared database only when the table is empty.
+(async()=>{if(!db||!isAdmin){alert('Сначала войдите администратором');return}const {count,error}=await db.from('catalog').select('*',{count:'exact',head:true});if(error)throw error;if(count){alert('Каталог уже заполнен');return}const rows=defaultItems.map(({id,...data})=>({id,data}));const result=await db.from('catalog').insert(rows);if(result.error)throw result.error;await syncCatalog();alert('Каталог опубликован')})();
